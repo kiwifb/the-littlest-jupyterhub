@@ -141,7 +141,7 @@ def ensure_usergroups():
 MAMBAFORGE_VERSION = "23.1.0-1"
 # sha256 checksums
 MAMBAFORGE_SUPPORTED_ARCHS = [
-    "aarch64".
+    "aarch64",
     "x86_64"
 ]
 
