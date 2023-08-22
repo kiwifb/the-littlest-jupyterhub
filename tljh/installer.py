@@ -138,12 +138,10 @@ def ensure_usergroups():
 
 # Install mambaforge using an installer from
 # https://github.com/conda-forge/miniforge/releases
+# Set the defult version to be installed
 MAMBAFORGE_VERSION = "23.1.0-1"
-# sha256 checksums
-MAMBAFORGE_SUPPORTED_ARCHS = [
-    "aarch64",
-    "x86_64"
-]
+# supported archs list
+MAMBAFORGE_SUPPORTED_ARCHS = ["aarch64", "x86_64"]
 
 # minimum versions of packages
 MINIMUM_VERSIONS = {
@@ -157,13 +155,13 @@ MINIMUM_VERSIONS = {
 
 
 def _mambaforge_url(version=MAMBAFORGE_VERSION, arch=None):
-    """Return (URL, checksum) for mambaforge download for a given version and arch
+    """Return (URL, checksum_URL) for mambaforge download for a given version and arch
 
     Default values provided for both version and arch
     """
     if arch is None:
         arch = os.uname().machine
-    # Check system architecture
+    # Check system architecture is supported
     if arch not in MAMBAFORGE_SUPPORTED_ARCHS:
         raise ValueError(
             f"Unsupported architecture: {arch}. TLJH only supports {MAMBAFORGE_SUPPORTED_ARCHS}"
@@ -199,11 +197,11 @@ def ensure_user_environment(user_requirements_txt_file):
             raise OSError(msg)
 
         logger.info("Downloading & setting up user environment...")
-        installer_url, installer_sha256 = _mambaforge_url(
-            os.environ.get("USER_ENV_MAMBAFORGE", MAMBAFORGE_VERSION)
+        installer_url, installer_checksum = _mambaforge_url(
+            os.environ.get("TLJH_MAMBAFORGE_VERSION", MAMBAFORGE_VERSION)
         )
         with conda.download_miniconda_installer(
-            installer_url, installer_sha256
+            installer_url, installer_checksum
         ) as installer_path:
             conda.install_miniconda(installer_path, USER_ENV_PREFIX)
         package_versions = conda.get_conda_package_versions(USER_ENV_PREFIX)

@@ -59,6 +59,7 @@ def download_miniconda_installer(installer_url, installer_sha256sum):
     with tempfile.NamedTemporaryFile("wb", suffix=".sh") as f:
         tic = time.perf_counter()
         r = requests.get(installer_url)
+        # also request the associated checksum
         cs = requests.get(installer_sha256sum)
         r.raise_for_status()
         f.write(r.content)
@@ -68,6 +69,7 @@ def download_miniconda_installer(installer_url, installer_sha256sum):
         os.fsync(f.fileno())
         t = time.perf_counter() - tic
         logger.info(f"Downloaded conda installer {installer_url} in {t:.1f}s")
+        # Retrieve the checksum
         sha256sum = cs.content.decode('utf-8').split()[0]
         logger.info(f"Checksum for the conda installer: {sha256sum}")
 
