@@ -198,7 +198,9 @@ def ensure_user_environment(user_requirements_txt_file):
             raise OSError(msg)
 
         logger.info("Downloading & setting up user environment...")
-        installer_url, installer_sha256 = _mambaforge_url()
+        installer_url, installer_sha256 = _mambaforge_url(
+            os.environ.get("USER_ENV_MAMBAFORGE", MAMBAFORGE_VERSION)
+        )
         with conda.download_miniconda_installer(
             installer_url, installer_sha256
         ) as installer_path:
