@@ -25,6 +25,9 @@ Environment variables:
     TLJH_BOOTSTRAP_DEV          Determines if --editable is passed when
                                 installing the tljh installer. Pass the values
                                 yes or no.
+    TLJH_MAMBAFORGE_VERSION     Default to a release defined in installer. Allows
+                                to choose a particular version of mambaforge than
+                                the default including testing newer ones.
 
 Command line flags, from "bootstrap.py --help":
 
