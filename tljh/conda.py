@@ -69,7 +69,7 @@ def download_miniconda_installer(installer_url, installer_sha256sum):
         t = time.perf_counter() - tic
         logger.info(f"Downloaded conda installer {installer_url} in {t:.1f}s")
         sha256sum = cs.content.decode('utf-8').split()[0]
-        logger.info(f"Checksum for the conda installer: {sha256}")
+        logger.info(f"Checksum for the conda installer: {sha256sum}")
 
         if sha256sum and sha256_file(f.name) != sha256sum:
             raise Exception("sha256sum hash mismatch! Downloaded file corrupted")
