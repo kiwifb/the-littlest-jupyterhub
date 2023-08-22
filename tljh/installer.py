@@ -140,10 +140,10 @@ def ensure_usergroups():
 # https://github.com/conda-forge/miniforge/releases
 MAMBAFORGE_VERSION = "23.1.0-1"
 # sha256 checksums
-MAMBAFORGE_CHECKSUMS = {
-    "aarch64": "d9d89c9e349369702171008d9ee7c5ce80ed420e5af60bd150a3db4bf674443a",
-    "x86_64": "cfb16c47dc2d115c8b114280aa605e322173f029fdb847a45348bf4bd23c62ab",
-}
+MAMBAFORGE_SUPPORTED_ARCHS = [
+    "aarch64".
+    "x86_64"
+]
 
 # minimum versions of packages
 MINIMUM_VERSIONS = {
@@ -163,17 +163,18 @@ def _mambaforge_url(version=MAMBAFORGE_VERSION, arch=None):
     """
     if arch is None:
         arch = os.uname().machine
+    # Check system architecture
+    if arch not in MAMBAFORGE_SUPPORTED_ARCHS:
+        raise ValueError(
+            f"Unsupported architecture: {arch}. TLJH only supports {MAMBAFORGE_SUPPORTED_ARCHS}"
+        )
     installer_url = "https://github.com/conda-forge/miniforge/releases/download/{v}/Mambaforge-{v}-Linux-{arch}.sh".format(
         v=version,
         arch=arch,
     )
-    # Check system architecture, set appropriate installer checksum
-    checksum = MAMBAFORGE_CHECKSUMS.get(arch)
-    if not checksum:
-        raise ValueError(
-            f"Unsupported architecture: {arch}. TLJH only supports {','.join(MAMBAFORGE_CHECKSUMS.keys())}"
-        )
-    return installer_url, checksum
+    installer_checksum = f"{installer_url}.sha256"
+
+    return installer_url, installer_checksum
 
 
 def ensure_user_environment(user_requirements_txt_file):

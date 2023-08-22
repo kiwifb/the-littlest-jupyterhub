@@ -46,7 +46,7 @@ def get_conda_package_versions(prefix):
 
 
 @contextlib.contextmanager
-def download_miniconda_installer(installer_url, sha256sum):
+def download_miniconda_installer(installer_url, installer_sha256sum):
     """
     Context manager to download miniconda installer from a given URL
 
@@ -59,6 +59,7 @@ def download_miniconda_installer(installer_url, sha256sum):
     with tempfile.NamedTemporaryFile("wb", suffix=".sh") as f:
         tic = time.perf_counter()
         r = requests.get(installer_url)
+        cs = requests.get(installer_sha256sum)
         r.raise_for_status()
         f.write(r.content)
         # Remain in the NamedTemporaryFile context, but flush changes, see:
@@ -67,6 +68,8 @@ def download_miniconda_installer(installer_url, sha256sum):
         os.fsync(f.fileno())
         t = time.perf_counter() - tic
         logger.info(f"Downloaded conda installer {installer_url} in {t:.1f}s")
+        sha256sum = cs.content.decode('utf-8').split()[0]
+        logger.info(f"Checksum for the conda installer: {sha256}")
 
         if sha256sum and sha256_file(f.name) != sha256sum:
             raise Exception("sha256sum hash mismatch! Downloaded file corrupted")
