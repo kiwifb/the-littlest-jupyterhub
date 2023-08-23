@@ -104,6 +104,25 @@ When pointing to a file on GitHub, make sure to use the 'Raw' version. It should
 `raw.githubusercontent.com`, not `github.com`.
 :::
 
+## Installing a different version of mambaforge
+
+By default TLJH installs a known working version of mambaforge that is hardcoded by the variable
+`MAMBAFORGE_VERSION` defined in `tljh/installer.py`. This can be changed when installing TLJH by
+defining the variable `TLJH_MAMBAFORGE_VERSION` before starting the installation
+
+```bash
+TLJH_MAMBAFORGE_VERSION="xx.x.x-x" curl -L https://tljh.jupyter.org/bootstrap.py \
+| sudo python3 - \
+ --admin admin
+```
+Where `xx.x.x-x` is a valid mambaforge version as listed on the 
+[mambaforge github release page](https://github.com/conda-forge/miniforge/releases).
+
+:::{note}
+While higher versions of mambaforge than the default usually work, there are no guarantees they will.
+There may also be issues when trying older versions, especially much older ones.
+:::
+
 ## Installing TLJH plugins
 
 The Littlest JupyterHub can install additional _plugins_ that provide additional
